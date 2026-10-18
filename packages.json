@@ -1,3 +1,15 @@
 {
-    "packages": []
+  "packages": [
+    {
+      "package": "dsm-terminal",
+      "version": "0.1.2",
+      "dname": "DSM Terminal",
+      "desc": "Web-based terminal for Synology DSM.",
+      "link": "https://chrisjbawden.github.io/self-hosted-synology-package-source/packages/dsm-terminal-0.1.2.spk",
+      "thumbnail": [],
+      "qinst": true,
+      "qupgrade": true,
+      "qstart": false
+    }
+  ]
 }
