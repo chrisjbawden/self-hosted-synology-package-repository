@@ -15,8 +15,6 @@
       "qupgrade": true,
       "qstart": true,
       "thirdparty": true,
-      "start": true,
-      "installed": false,
       "size": 1048576
     }
   ]
