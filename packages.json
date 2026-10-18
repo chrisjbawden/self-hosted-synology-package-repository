@@ -7,7 +7,7 @@
       "desc": "Test package for Synology DSM Package Centre.",
       "maintainer": "Chris Bawden",
       "distributor": "Custom Package Repository",
-      "arch": "x86_64",
+      "arch": "apollolake",
       "firmware": "7.0-40000",
       "link": "https://chrisjbawden.github.io/self-hosted-synology-package-source/packages/dsm-terminal-0.1.2.spk",
       "thumbnail": [],
