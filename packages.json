@@ -2,7 +2,7 @@
   "packages": [
     {
       "package": "dsm-terminal",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "dname": "DSM Terminal",
       "desc": "Test package for Synology DSM Package Centre.",
       "maintainer": "Chris Bawden",
