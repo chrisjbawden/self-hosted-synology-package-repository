@@ -26,7 +26,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Synology Package Repository</title>
+    <title>Self Hosted Synology Package Repository</title>
 
     <meta name="description"
           content="A custom Synology DSM package repository maintained by Chris Bawden.">
@@ -124,11 +124,19 @@
             margin-top: 0;
         }
 
+        /* Centre Card Headings and Descriptions */
+
+        .card h2,
+        .card > p {
+            text-align: center;
+        }
+
         /* Repository URL */
 
         .repo-url {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
             background: var(--background);
             border: 1px solid var(--border);
@@ -144,6 +152,7 @@
             color: #cbd5e1;
             overflow-wrap: anywhere;
             word-break: break-word;
+            text-align: center;
         }
 
         button {
@@ -233,6 +242,7 @@
             padding-top: 22px;
             border-top: 1px solid var(--border);
             font-size: 14px;
+            text-align: center;
         }
 
         /* Footer */
@@ -288,10 +298,10 @@
             Synology DSM
         </div>
 
-        <h1>Synology Package Repository</h1>
+        <h1>Self Hosted Synology Package Repository</h1>
 
         <p class="subtitle">
-            A community-maintained repository for custom Synology DSM
+            A self hosted repository for custom Synology DSM
             packages, providing a simple way to install and manage
             additional applications.
         </p>
