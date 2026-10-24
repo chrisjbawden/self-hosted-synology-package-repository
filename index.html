@@ -22,6 +22,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +30,7 @@
     <title>Self Hosted Synology Package Repository</title>
 
     <meta name="description"
-          content="A custom Synology DSM package repository maintained by Chris Bawden.">
+          content="A self hosted Synology DSM package repository maintained by Chris Bawden.">
 
     <style>
         :root {
@@ -65,9 +66,9 @@
         }
 
         .container {
-            max-width: 850px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 80px 24px;
+            padding: 70px 24px;
         }
 
         /* Header */
@@ -99,7 +100,7 @@
         .subtitle {
             color: var(--muted);
             font-size: 17px;
-            max-width: 600px;
+            max-width: 650px;
             margin: auto;
         }
 
@@ -117,18 +118,85 @@
             font-size: 21px;
             margin: 0 0 12px;
             letter-spacing: -0.3px;
+            text-align: center;
         }
 
-        .card p {
+        .card > p {
             color: var(--muted);
             margin-top: 0;
+            text-align: center;
         }
 
-        /* Centre Card Headings and Descriptions */
+        /* Package Gallery */
 
-        .card h2,
-        .card > p {
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 20px;
+            padding: 15px 0;
+        }
+
+        .package-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            padding: 18px 8px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition:
+                background 0.2s,
+                transform 0.2s;
+            min-width: 0;
+        }
+
+        .package-item:hover {
+            background: var(--surface-hover);
+            transform: translateY(-4px);
+            text-decoration: none;
+        }
+
+        .package-icon {
+            width: 76px;
+            height: 76px;
+            border-radius: 17px;
+            background: linear-gradient(
+                145deg,
+                #3b82f6,
+                #1d4ed8
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .package-icon svg {
+            width: 38px;
+            height: 38px;
+            stroke: white;
+        }
+
+        .package-name {
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        .package-version {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .package-status {
+            color: var(--muted);
+            text-align: center;
+            padding: 25px 0;
+            font-size: 14px;
         }
 
         /* Repository URL */
@@ -136,7 +204,6 @@
         .repo-url {
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 12px;
             background: var(--background);
             border: 1px solid var(--border);
@@ -176,7 +243,7 @@
             background: var(--success);
         }
 
-        /* Instructions */
+        /* Installation Instructions */
 
         .steps {
             list-style: none;
@@ -258,7 +325,13 @@
             color: var(--muted);
         }
 
-        /* Mobile */
+        /* Responsive Layout */
+
+        @media (max-width: 900px) {
+            .package-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
 
         @media (max-width: 600px) {
             .container {
@@ -269,6 +342,21 @@
                 padding: 22px;
             }
 
+            .package-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .package-icon {
+                width: 64px;
+                height: 64px;
+            }
+
+            .package-icon svg {
+                width: 32px;
+                height: 32px;
+            }
+
             .repo-url {
                 flex-direction: column;
                 align-items: stretch;
@@ -276,11 +364,16 @@
 
             .repo-url code {
                 padding: 8px;
-                text-align: center;
             }
 
             .repo-url button {
                 width: 100%;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .package-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
     </style>
@@ -294,9 +387,7 @@
 
     <header class="header">
 
-        <div class="badge">
-            Synology DSM
-        </div>
+        <div class="badge">Synology DSM</div>
 
         <h1>Self Hosted Synology Package Repository</h1>
 
@@ -307,6 +398,19 @@
         </p>
 
     </header>
+
+
+    <!-- Package Gallery -->
+
+    <section class="card">
+
+        <div id="package-grid" class="package-grid"></div>
+
+        <div id="package-status" class="package-status">
+            Loading packages...
+        </div>
+
+    </section>
 
 
     <!-- Repository URL -->
@@ -408,26 +512,6 @@
     </section>
 
 
-    <!-- About -->
-
-    <section class="card">
-
-        <h2>About This Repository</h2>
-
-        <p>
-            This repository provides custom packages for
-            Synology DiskStation Manager (DSM).
-        </p>
-
-        <p>
-            Packages are maintained independently and are
-            not officially affiliated with or endorsed
-            by Synology.
-        </p>
-
-    </section>
-
-
     <!-- Footer -->
 
     <footer>
@@ -451,11 +535,18 @@
 <script>
 
     /*
-     * Remove the raw JSON manifest displayed
-     * before the HTML document.
-     *
-     * The JSON remains in the original response
-     * for Synology Package Centre compatibility.
+     * Configuration
+     */
+
+    const GITHUB_OWNER = 'chrisjbawden';
+
+    const PACKAGE_REPOSITORY = 'self-hosted-synology-package-source';
+
+    const PACKAGE_DIRECTORY = 'packages';
+
+
+    /*
+     * Remove raw JSON manifest from browser display.
      */
 
     function hideManifest() {
@@ -477,7 +568,189 @@
 
 
     /*
-     * Copy repository URL to clipboard.
+     * Package icon.
+     *
+     * Generic DSM-style application icon.
+     */
+
+    function createPackageIcon() {
+
+        return `
+            <div class="package-icon">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="1.7">
+
+                    <rect
+                        x="3"
+                        y="3"
+                        width="7"
+                        height="7"
+                        rx="1.5"
+                    />
+
+                    <rect
+                        x="14"
+                        y="3"
+                        width="7"
+                        height="7"
+                        rx="1.5"
+                    />
+
+                    <rect
+                        x="3"
+                        y="14"
+                        width="7"
+                        height="7"
+                        rx="1.5"
+                    />
+
+                    <rect
+                        x="14"
+                        y="14"
+                        width="7"
+                        height="7"
+                        rx="1.5"
+                    />
+
+                </svg>
+            </div>
+        `;
+
+    }
+
+
+    /*
+     * Convert package filename into display information.
+     *
+     * Example:
+     * dsm-terminal-0.1.2.spk
+     *
+     * Name: DSM Terminal
+     * Version: 0.1.2
+     */
+
+    function parsePackageFilename(filename) {
+
+        const cleanName = filename.replace(/\.spk$/i, '');
+
+        const match = cleanName.match(
+            /^(.*?)-(\d+(?:\.\d+)+(?:[-+][a-zA-Z0-9.-]+)?)$/
+        );
+
+        let name = cleanName;
+        let version = '';
+
+        if (match) {
+            name = match[1];
+            version = match[2];
+        }
+
+        name = name
+            .replace(/[-_]/g, ' ')
+            .replace(/\b\w/g, char => char.toUpperCase());
+
+        return {
+            name,
+            version
+        };
+
+    }
+
+
+    /*
+     * Retrieve package files from GitHub.
+     */
+
+    async function loadPackages() {
+
+        const grid = document.getElementById('package-grid');
+
+        const status = document.getElementById('package-status');
+
+        const apiURL =
+            `https://api.github.com/repos/${GITHUB_OWNER}/${PACKAGE_REPOSITORY}/contents/${PACKAGE_DIRECTORY}`;
+
+        try {
+
+            const response = await fetch(apiURL);
+
+            if (!response.ok) {
+                throw new Error(
+                    `GitHub API returned ${response.status}`
+                );
+            }
+
+            const files = await response.json();
+
+            const packages = files
+                .filter(file =>
+                    file.type === 'file' &&
+                    file.name.toLowerCase().endsWith('.spk')
+                )
+                .sort((a, b) =>
+                    a.name.localeCompare(b.name)
+                );
+
+            if (packages.length === 0) {
+
+                status.textContent =
+                    'No packages are currently available.';
+
+                return;
+            }
+
+            status.style.display = 'none';
+
+            for (const file of packages) {
+
+                const info = parsePackageFilename(file.name);
+
+                const item = document.createElement('a');
+
+                item.className = 'package-item';
+
+                item.href = file.download_url;
+
+                item.title = `Download ${info.name}`;
+
+                item.setAttribute('download', file.name);
+
+                item.innerHTML = `
+                    ${createPackageIcon()}
+                    <span class="package-name"></span>
+                    <span class="package-version"></span>
+                `;
+
+                item.querySelector('.package-name')
+                    .textContent = info.name;
+
+                item.querySelector('.package-version')
+                    .textContent = info.version
+                        ? `v${info.version}`
+                        : '';
+
+                grid.appendChild(item);
+
+            }
+
+        } catch (error) {
+
+            console.error('Unable to load packages:', error);
+
+            status.textContent =
+                'Unable to load packages. Please try again later.';
+
+        }
+
+    }
+
+
+    /*
+     * Copy repository URL.
      */
 
     async function copyRepositoryURL() {
@@ -494,11 +767,13 @@
             await navigator.clipboard.writeText(url);
 
             button.textContent = 'Copied!';
+
             button.classList.add('copied');
 
             setTimeout(() => {
 
                 button.textContent = 'Copy URL';
+
                 button.classList.remove('copied');
 
             }, 2000);
@@ -519,10 +794,16 @@
 
 
     /*
-     * Initialise page.
+     * Initialise.
      */
 
-    document.addEventListener('DOMContentLoaded', hideManifest);
+    document.addEventListener('DOMContentLoaded', () => {
+
+        hideManifest();
+
+        loadPackages();
+
+    });
 
 </script>
 
