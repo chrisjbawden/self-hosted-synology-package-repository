@@ -1,45 +1,17 @@
 <!DOCTYPE html>
-<html lang="en-AU">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=packages.json">
     <title>Synology Package Repository</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        h1 {
-            color: #0078d4;
-        }
-        code {
-            background: #f4f4f4;
-            padding: 3px 6px;
-            border-radius: 4px;
-        }
-    </style>
+    <script>
+        window.location.replace("packages.json");
+    </script>
 </head>
 <body>
-    <h1>Synology Package Repository</h1>
-
-    <p>Custom Synology DSM package repository hosted on GitHub Pages.</p>
-
-    <h2>Package Catalogue</h2>
+    <p>Redirecting to the Synology Package Repository...</p>
     <p>
-        <a href="packages.json">View packages.json</a>
+        <a href="packages.json">Click here if you are not redirected automatically.</a>
     </p>
-
-    <h2>Repository URL</h2>
-    <p>Add the following URL to Synology Package Centre:</p>
-
-    <code id="repo-url"></code>
-
-    <script>
-        document.getElementById("repo-url").textContent =
-            window.location.origin + window.location.pathname;
-    </script>
 </body>
 </html>
