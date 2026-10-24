@@ -1,28 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Synology Package Repository</title>
-</head>
-<body>
-<script>
-    fetch('./packages.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to load packages.json');
-            }
-            return response.json();
-        })
-        .then(data => {
-            document.open();
-            document.write(
-                '<pre>' + JSON.stringify(data, null, 2) + '</pre>'
-            );
-            document.close();
-        })
-        .catch(error => {
-            document.body.textContent = error.message;
-        });
-</script>
-</body>
-</html>
+{
+  "packages": [
+    {
+      "package": "dsm-terminal",
+      "version": "0.1.4",
+      "dname": "DSM Terminal",
+      "desc": "Test package for Synology DSM Package Centre.",
+      "maintainer": "Chris Bawden",
+      "distributor": "Custom Package Repository",
+      "arch": "apollolake",
+      "firmware": "7.0-40000",
+      "link": "https://chrisjbawden.github.io/self-hosted-synology-package-source/packages/dsm-terminal-0.1.2.spk",
+      "thumbnail": [],
+      "qinst": true,
+      "qupgrade": true,
+      "qstart": true,
+      "thirdparty": true,
+      "size": 1048576
+    }
+  ]
+}
