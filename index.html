@@ -2,16 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=packages.json">
     <title>Synology Package Repository</title>
-    <script>
-        window.location.replace("packages.json");
-    </script>
 </head>
 <body>
-    <p>Redirecting to the Synology Package Repository...</p>
-    <p>
-        <a href="packages.json">Click here if you are not redirected automatically.</a>
-    </p>
+<script>
+    fetch('./packages.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to load packages.json');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.open();
+            document.write(
+                '<pre>' + JSON.stringify(data, null, 2) + '</pre>'
+            );
+            document.close();
+        })
+        .catch(error => {
+            document.body.textContent = error.message;
+        });
+</script>
 </body>
 </html>
